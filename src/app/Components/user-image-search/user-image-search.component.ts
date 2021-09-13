@@ -2,8 +2,8 @@ import {
   appContants
 } from '../../Contants/app.contants';
 import {
-  FlickerImageList,
-  FlickerImageModel
+  FlickerImageModel,
+  FlickerPhotosDetails
 } from './../../Models/flickr-image.model';
 import {
   FlickerServiceService
@@ -23,6 +23,7 @@ import {
 } from 'rxjs';
 import {
   filter,
+  finalize,
   tap
 } from 'rxjs/operators';
 
@@ -33,15 +34,14 @@ import {
 })
 export class UserImageSearchComponent implements OnInit, OnDestroy {
   userSearchForm: FormGroup;
-  imageExtrasPayload = ['date_upload', 'date_taken', 'owner_name', 'views', 'url_q']
-  userSearchImageResultArray: FlickerImageList[] = [];
-  subscription: Subscription;
+  imageExtrasPayload: string[] = ['date_upload', 'date_taken', 'owner_name', 'views', 'url_q']
+  userSearchImageResultArray: FlickerPhotosDetails[] = [];
+  subscription: Subscription = new Subscription();
   displayLoader: boolean = false;
-  spinnerDiameter = appContants.spninnerDiameter
+  displayContent: boolean = true;
+  spinnerDiameter: string = appContants.spninnerDiameter
 
-  constructor(private flickerImageService: FlickerServiceService) {
-    this.subscription = new Subscription();
-  }
+  constructor(private flickerImageService: FlickerServiceService) {}
 
   ngOnInit(): void {
     this.initialiseFormGroup();
@@ -61,7 +61,7 @@ export class UserImageSearchComponent implements OnInit, OnDestroy {
     this.userSearchForm.valid && this.getIntersestingImage();
   }
 
-  addtagName(imageResultArray: FlickerImageList[]): void {
+  addtagName(imageResultArray: FlickerPhotosDetails[]): void {
     if (imageResultArray.length > 0) {
       imageResultArray.forEach(element => {
         element['tagName'] = this.userSearchForm.value.userInput
@@ -76,17 +76,16 @@ export class UserImageSearchComponent implements OnInit, OnDestroy {
       perPage: 1,
       extras: this.imageExtrasPayload.toString()
     }
+    this.displayContent = false;
     this.displayLoader = true
-    this.subscription.add(this.flickerImageService.getInterestingImage(requestImagePayload).pipe(filter(res => res.photos.photo.length > 0), tap((res => this.addtagName(res.photos.photo)))).subscribe((res: FlickerImageModel) => {
+    this.subscription.add(this.flickerImageService.getInterestingImage(requestImagePayload).pipe(filter(res => res.photos.photo.length > 0), tap((res => this.addtagName(res.photos.photo))), finalize(() => {
+      this.displayLoader = false;
+      this.displayContent = true;
+    })).subscribe((res: FlickerImageModel) => {
       if (res.stat === 'ok') {
-        this.displayLoader = false;
-        this.userSearchImageResultArray = res.photos.photo.length > 0 ? res.photos.photo : []
+        this.userSearchImageResultArray = [...this.userSearchImageResultArray, ...res.photos.photo]
         this.userSearchForm.reset();
-      } else {
-        this.displayLoader = false
       }
-    }, error => {
-      this.displayLoader = false
     }))
   }
 }

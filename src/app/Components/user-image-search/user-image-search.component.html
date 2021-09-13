@@ -11,26 +11,24 @@
       (click)="searchImage()">Submit</button>
   </div>
 </div>
-<div *ngIf="userSearchImageResultArray.length > 0">
+<div *ngIf="userSearchImageResultArray.length > 0 && displayContent">
   <div class="image-filter">
     <span>Sorted By</span>
     <span>Number Of Views</span>
     <span>Date when the photo was taken</span>
     <span>Date when the photo was uploaded</span>
   </div>
-  <div class="image-result">
-    <div>
-      <mat-card *ngFor="let resultImage of userSearchImageResultArray">
-        <img mat-card-image src="{{resultImage.url_q}}" alt="Photo of a Shiba Inu">
-        <mat-card-content>
-          <div>Tag Name: {{resultImage.tagName || '-'}}</div>
-          <div>Owner Name: {{resultImage.ownername || '-'}}</div>
-          <div>Date Upload: {{resultImage.dateupload | date: 'short' || '-'}}</div>
-          <div>Date Taken: {{resultImage.datetaken | date: 'short' || '-'}}</div>
-          <div>Views: {{resultImage.views}}</div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <div class="flickr-card">
+    <mat-card *ngFor="let resultImage of userSearchImageResultArray" class="image-card image-result">
+      <img mat-card-image src="{{resultImage.url_q}}" alt="Photo of a Shiba Inu">
+      <mat-card-content>
+        <div>Tag Name: {{resultImage?.tagName || '-'}}</div>
+        <div>Owner Name: {{resultImage?.ownername || '-'}}</div>
+        <div>Date Upload: {{resultImage?.dateupload | date: 'short' || '-'}}</div>
+        <div>Date Taken: {{resultImage?.datetaken | date: 'short' || '-'}}</div>
+        <div>Views: {{resultImage?.views || '-'}}</div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
 <mat-spinner class="spinner" *ngIf="displayLoader" [diameter]="spinnerDiameter"></mat-spinner>

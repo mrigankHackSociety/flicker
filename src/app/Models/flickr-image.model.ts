@@ -1,16 +1,17 @@
 export class FlickerImageModel {
-  photos: FlickerImageDetails;
-  stat: string;
-}
-export class FlickerImageDetails {
-  page: number​​
-  pages: number​​
-  perpage: number​​
-  photo: FlickerImageList[]​​
-  total: number
+  photos: FlickerPhotos;
+  stat:   string;
 }
 
-export class FlickerImageList {
+export class FlickerPhotos {
+  page:    number;
+  pages:   number;
+  perpage: number;
+  total:   number;
+  photo:   FlickerPhotosDetails[];
+}
+
+export class FlickerPhotosDetails {
   id:                   string;
   owner:                string;
   secret:               string;
@@ -23,11 +24,12 @@ export class FlickerImageList {
   dateupload:           string;
   datetaken:            string;
   datetakengranularity: number;
-  datetakenunknown:     number;
+  datetakenunknown:     string;
   ownername:            string;
   views:                string;
   url_q:                string;
-  height_q:             string;
-  width_q:              string;
+  height_q:             number;
+  width_q:              number;
 }
+
 

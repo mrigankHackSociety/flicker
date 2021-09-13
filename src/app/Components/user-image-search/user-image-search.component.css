@@ -35,3 +35,13 @@
 .reset-btn {
   margin-right: 10px;
 }
+
+.image-card {
+  width: 20%;
+}
+
+.flickr-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
