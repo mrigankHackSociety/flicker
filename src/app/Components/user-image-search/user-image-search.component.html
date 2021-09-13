@@ -1,0 +1,36 @@
+<div class="user-search" [formGroup]="userSearchForm">
+  <div>
+    <mat-form-field class="example-form-field">
+      <mat-label>Please Enter a Tag</mat-label>
+      <input matInput type="text" formControlName="userInput" placeholder="Please Enter a Tag">
+    </mat-form-field>
+  </div>
+  <div class="btn-group">
+    <button mat-stroked-button (click)="userSearchForm.reset()" class="reset-btn">Reset Input</button>
+    <button mat-raised-button color="primary" [disabled]="userSearchForm.invalid"
+      (click)="searchImage()">Submit</button>
+  </div>
+</div>
+<div *ngIf="userSearchImageResultArray.length > 0">
+  <div class="image-filter">
+    <span>Sorted By</span>
+    <span>Number Of Views</span>
+    <span>Date when the photo was taken</span>
+    <span>Date when the photo was uploaded</span>
+  </div>
+  <div class="image-result">
+    <div>
+      <mat-card *ngFor="let resultImage of userSearchImageResultArray">
+        <img mat-card-image src="{{resultImage.url_q}}" alt="Photo of a Shiba Inu">
+        <mat-card-content>
+          <div>Tag Name: {{resultImage.tagName || '-'}}</div>
+          <div>Owner Name: {{resultImage.ownername || '-'}}</div>
+          <div>Date Upload: {{resultImage.dateupload | date: 'short' || '-'}}</div>
+          <div>Date Taken: {{resultImage.datetaken | date: 'short' || '-'}}</div>
+          <div>Views: {{resultImage.views}}</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+<mat-spinner class="spinner" *ngIf="displayLoader" [diameter]="spinnerDiameter"></mat-spinner>

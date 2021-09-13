@@ -1,0 +1,37 @@
+.user-search {
+  display: flex;
+  justify-content: center;
+  margin: 8px;
+  padding: 2%;
+}
+
+.search-tag {
+  display: flex;
+  justify-content: center;
+}
+
+.search-chip {
+  margin-right: 10px;
+}
+
+.image-filter {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.image-result {
+  width: 20%;
+  margin: 2%;
+}
+
+.spinner {
+  margin: 0 auto;
+}
+
+.btn-group {
+  margin-left: 2%;
+}
+
+.reset-btn {
+  margin-right: 10px;
+}
